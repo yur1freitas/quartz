@@ -9,10 +9,10 @@
         "host"
     ],
     "args": {
-        "TZ": "${localEnv:TZ:America/Sao_Paulo}",
-        "LANG": "${localEnv:LANG:pt_BR.UTF-8}",
-        "LC_ALL": "${localEnv:LC_ALL:pt_BR.UTF-8}",
-        "LANGUAGE": "${localEnv:LOCALE:pt_BR.UTF-8}"
+        "TZ": "${localEnv:TZ}",
+        "LANG": "${localEnv:LANG}",
+        "LC_ALL": "${localEnv:LC_ALL}",
+        "LANGUAGE": "${localEnv:LOCALE}"
     },
     "features": {
         "ghcr.io/devcontainers/features/common-utils:2": {
