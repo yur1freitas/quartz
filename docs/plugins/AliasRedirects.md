@@ -1,7 +1,7 @@
 ---
 title: AliasRedirects
 tags:
-  - plugin/emitter
+    - plugin/emitter
 ---
 
 This plugin emits HTML redirect pages for aliases and permalinks defined in the frontmatter of content files.
@@ -10,9 +10,9 @@ For example, A `foo.md` has the following frontmatter
 
 ```md title="foo.md"
 ---
-title: "Foo"
+title: 'Foo'
 alias:
-  - "bar"
+    - 'bar'
 ---
 ```
 

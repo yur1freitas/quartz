@@ -1,29 +1,34 @@
 {
-  "name": "Quartz",
-  "remoteUser": "dev",
-  "build": { "dockerfile": "Dockerfile", "context": "." },
-  "runArgs": ["-v", "/var/run/docker.sock:/var/run/docker.sock", "--network", "host"],
-  "args": {
-    "TZ": "${localEnv:TZ:America/Sao_Paulo}",
-    "LANG": "${localEnv:LANG:pt_BR.UTF-8}",
-    "LC_ALL": "${localEnv:LC_ALL:pt_BR.UTF-8}",
-    "LANGUAGE": "${localEnv:LOCALE:pt_BR.UTF-8}"
-  },
-  "features": {
-    "ghcr.io/devcontainers/features/common-utils:2": {
-      "installZsh": false,
-      "username": "dev",
-      "userUid": "1000",
-      "userGid": "1000",
-      "upgradePackages": true
+    "name": "Quartz",
+    "remoteUser": "dev",
+    "build": { "dockerfile": "Dockerfile", "context": "." },
+    "runArgs": [
+        "-v",
+        "/var/run/docker.sock:/var/run/docker.sock",
+        "--network",
+        "host"
+    ],
+    "args": {
+        "TZ": "${localEnv:TZ:America/Sao_Paulo}",
+        "LANG": "${localEnv:LANG:pt_BR.UTF-8}",
+        "LC_ALL": "${localEnv:LC_ALL:pt_BR.UTF-8}",
+        "LANGUAGE": "${localEnv:LOCALE:pt_BR.UTF-8}"
     },
-    "ghcr.io/devcontainers/features/docker-in-docker:2.16.0": {
-      "moby": false
+    "features": {
+        "ghcr.io/devcontainers/features/common-utils:2": {
+            "installZsh": false,
+            "username": "dev",
+            "userUid": "1000",
+            "userGid": "1000",
+            "upgradePackages": true
+        },
+        "ghcr.io/devcontainers/features/docker-in-docker:2.16.0": {
+            "moby": false
+        },
+        "ghcr.io/devcontainers/features/git:1.3.5": {},
+        "ghcr.io/devcontainers/features/node:1.7.1": {
+            "version": "24.14.0"
+        }
     },
-    "ghcr.io/devcontainers/features/git:1.3.5": {},
-    "ghcr.io/devcontainers/features/node:1.7.1": {
-      "version": "24.14.0"
-    }
-  },
-  "postCreateCommand": "echo 'eval \"$(starship init bash)\"' >> ~/.bashrc"
+    "postCreateCommand": "echo 'eval \"$(starship init bash)\"' >> ~/.bashrc"
 }
