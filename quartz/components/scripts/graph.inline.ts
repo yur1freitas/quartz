@@ -196,13 +196,17 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
 
     // precompute style prop strings as pixi doesn't support css variables
     const cssVars = [
-        '--secondary',
-        '--tertiary',
-        '--gray',
-        '--light',
-        '--lightgray',
-        '--dark',
-        '--darkgray',
+        '--foreground',
+        '--background',
+        '--border',
+        '--link',
+        '--link-hover',
+        '--red',
+        '--orange',
+        '--yellow',
+        '--lime',
+        '--green',
+        '--cyan',
         '--bodyFont'
     ] as const
     const computedStyleMap = cssVars.reduce(
@@ -219,11 +223,11 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
     const color = (d: NodeData) => {
         const isCurrent = d.id === slug
         if (isCurrent) {
-            return computedStyleMap['--secondary']
+            return computedStyleMap['--link']
         } else if (visited.has(d.id) || d.id.startsWith('tags/')) {
-            return computedStyleMap['--tertiary']
+            return computedStyleMap['--red']
         } else {
-            return computedStyleMap['--gray']
+            return computedStyleMap['--border']
         }
     }
 
@@ -290,8 +294,9 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
             }
 
             l.color = l.active
-                ? computedStyleMap['--gray']
-                : computedStyleMap['--lightgray']
+                ? computedStyleMap['--red']
+                : computedStyleMap['--border']
+
             tweenGroup.add(new Tweened<LinkRenderData>(l).to({ alpha }, 200))
         }
 
@@ -422,7 +427,7 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
             anchor: { x: 0.5, y: 1.2 },
             style: {
                 fontSize: fontSize * 15,
-                fill: computedStyleMap['--dark'],
+                fill: computedStyleMap['--foreground'],
                 fontFamily: computedStyleMap['--bodyFont']
             },
             resolution: window.devicePixelRatio * 4
@@ -439,7 +444,9 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
             cursor: 'pointer'
         })
             .circle(0, 0, nodeRadius(n))
-            .fill({ color: isTagNode ? computedStyleMap['--light'] : color(n) })
+            .fill({
+                color: isTagNode ? computedStyleMap['--background'] : color(n)
+            })
             .on('pointerover', (e) => {
                 updateHoverInfo(e.target.label)
                 oldLabelOpacity = label.alpha
@@ -456,7 +463,7 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
             })
 
         if (isTagNode) {
-            gfx.stroke({ width: 2, color: computedStyleMap['--tertiary'] })
+            gfx.stroke({ width: 2, color: computedStyleMap['--foreground'] })
         }
 
         nodesContainer.addChild(gfx)
@@ -481,7 +488,7 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
         const linkRenderDatum: LinkRenderData = {
             simulationData: l,
             gfx,
-            color: computedStyleMap['--lightgray'],
+            color: computedStyleMap['--border'],
             alpha: 1,
             active: false
         }

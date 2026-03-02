@@ -127,13 +127,12 @@ button.desktop-explorer {
         }
 
         & li > a {
-            color: var(--dark);
-            opacity: 0.75;
+            color: color-mix(in oklab, var(--foreground) 70%, transparent 30%);
             pointer-events: all;
 
             &.active {
                 opacity: 1;
-                color: var(--tertiary);
+                color: var(--orange);
             }
         }
     }
@@ -167,7 +166,7 @@ button.desktop-explorer {
     user-select: none;
 
     & div > a {
-        color: var(--secondary);
+        color: color-mix(in oklab, var(--foreground) 75%, transparent 25%);
         font-family: var(--headerFont);
         font-size: 0.95rem;
         font-weight: $semiBoldWeight;
@@ -176,7 +175,7 @@ button.desktop-explorer {
     }
 
     & div > a:hover {
-        color: var(--tertiary);
+        color: var(--foreground);
     }
 
     & div > button {
@@ -194,7 +193,7 @@ button.desktop-explorer {
         & span {
             font-size: 0.95rem;
             display: inline-block;
-            color: var(--secondary);
+            color: color-mix(in oklab, var(--foreground) 75%, transparent 25%);
             font-weight: $semiBoldWeight;
             margin: 0;
             line-height: 1.5rem;
@@ -205,7 +204,7 @@ button.desktop-explorer {
 
 .folder-icon {
     margin-right: 5px;
-    color: var(--secondary);
+    color: color-mix(in oklab, var(--foreground) 75%, transparent 25%);
     cursor: pointer;
     transition: transform 0.3s ease;
     backface-visibility: visible;
@@ -217,7 +216,7 @@ li:has(> .folder-outer:not(.open)) > .folder-container > svg {
 }
 
 .folder-icon:hover {
-    color: var(--tertiary);
+    color: var(--foreground);
 }
 
 .explorer {

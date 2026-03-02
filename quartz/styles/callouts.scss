@@ -2,10 +2,11 @@
 @use 'sass:color';
 
 .callout {
-    border: 1px solid var(--border);
-    background-color: var(--bg);
-    border-radius: 5px;
-    padding: 0 1rem;
+    border-radius: var(--callout-border-radius);
+    background-color: transparent;
+    padding: 0;
+    border: none;
+
     overflow-y: hidden;
     box-sizing: border-box;
 
@@ -13,6 +14,13 @@
         display: grid;
         transition: grid-template-rows 0.1s cubic-bezier(0.02, 0.01, 0.47, 1);
         overflow: hidden;
+
+        border-bottom-right-radius: var(--callout-border-radius);
+        border-bottom-left-radius: var(--callout-border-radius);
+        padding: var(--callout-padding);
+
+        background-color: var(--callout-content-background);
+        box-shadow: var(--shadow);
 
         & > :first-child {
             margin-top: 0;
@@ -113,8 +121,8 @@
     }
 
     &[data-callout='quote'] {
-        --color: var(--secondary);
-        --border: var(--lightgray);
+        --border: var(--border);
+        --color: var(--callout-content-background);
         --callout-icon: var(--callout-icon-quote);
     }
 
@@ -147,8 +155,15 @@
     display: flex;
     align-items: flex-start;
     gap: 5px;
-    padding: 1rem 0;
+
+    border-top-right-radius: var(--callout-border-radius);
+    border-top-left-radius: var(--callout-border-radius);
+    padding: var(--callout-padding);
+
+    background-color: var(--bg);
     color: var(--color);
+
+    box-shadow: var(--shadow);
 
     --icon-size: 18px;
 

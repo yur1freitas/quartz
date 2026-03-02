@@ -8,7 +8,7 @@
 
     & > .graph-outer {
         border-radius: 5px;
-        border: 1px solid var(--lightgray);
+        border: 1px solid var(--border);
         box-sizing: border-box;
         height: 250px;
         margin: 0.5em 0;
@@ -19,7 +19,7 @@
             cursor: pointer;
             background: none;
             border: none;
-            color: var(--dark);
+            color: var(--foreground);
             opacity: 0.5;
             width: 24px;
             height: 24px;
@@ -33,7 +33,7 @@
             transition: background-color 0.5s ease;
             cursor: pointer;
             &:hover {
-                background-color: var(--lightgray);
+                background-color: var(--border);
             }
         }
     }
@@ -54,8 +54,8 @@
         }
 
         & > .global-graph-container {
-            border: 1px solid var(--lightgray);
-            background-color: var(--light);
+            border: 1px solid var(--border);
+            background-color: var(--background);
             border-radius: 5px;
             box-sizing: border-box;
             position: fixed;

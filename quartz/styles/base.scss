@@ -18,19 +18,19 @@ html {
 body {
     margin: 0;
     box-sizing: border-box;
-    background-color: var(--light);
     font-family: var(--bodyFont);
-    color: var(--darkgray);
+    color: var(--foreground);
+    background-color: var(--background);
 }
 
 .text-highlight {
-    background-color: var(--textHighlight);
+    background-color: var(--text-highlight);
     padding: 0 0.1rem;
     border-radius: 5px;
 }
+
 ::selection {
-    background: color-mix(in srgb, var(--tertiary) 60%, rgba(255, 255, 255, 0));
-    color: var(--darkgray);
+    background-color: color-mix(in oklab, var(--red) 50%, transparent 50%);
 }
 
 p,
@@ -46,14 +46,14 @@ ul,
 .math,
 .typst-doc,
 g[class~='typst-text'] {
-    color: var(--darkgray);
-    fill: var(--darkgray);
+    color: var(--foreground);
+    fill: var(--foreground);
     overflow-wrap: break-word;
     text-wrap: pretty;
 }
 
 path[class~='typst-shape'] {
-    stroke: var(--darkgray);
+    stroke: var(--foreground);
 }
 
 .math {
@@ -85,23 +85,22 @@ a {
     font-weight: $semiBoldWeight;
     text-decoration: none;
     transition: color 0.2s ease;
-    color: var(--secondary);
+    color: var(--link);
 
     &:hover {
-        color: var(--tertiary);
+        color: var(--link-hover);
     }
 
     &.internal {
         text-decoration: none;
-        background-color: var(--highlight);
         padding: 0 0.1rem;
         border-radius: 5px;
         line-height: 1.4rem;
 
         &.broken {
-            color: var(--secondary);
             opacity: 0.5;
             transition: opacity 0.2s ease;
+
             &:hover {
                 opacity: 0.8;
             }
@@ -113,6 +112,13 @@ a {
             padding: 0;
         }
         &.tag-link {
+            color: var(--red);
+            background-color: color-mix(
+                in oklab,
+                var(--red) 5%,
+                transparent 75%
+            );
+
             &::before {
                 content: '#';
             }
@@ -124,7 +130,7 @@ a {
         margin: 0 0.15em;
 
         > path {
-            fill: var(--dark);
+            fill: var(--foreground);
         }
     }
 }
@@ -174,17 +180,13 @@ a {
 
         & li:has(> input[type='checkbox']:checked) {
             text-decoration: line-through;
-            text-decoration-color: var(--gray);
-            color: var(--gray);
+            text-decoration-color: var(--border);
+            color: var(--border);
         }
 
         & li > * {
             margin-top: 0;
             margin-bottom: 0;
-        }
-
-        p > strong {
-            color: var(--dark);
         }
     }
 
@@ -203,6 +205,7 @@ a {
             row-gap: #{map.get($tabletGrid, rowGap)};
             grid-template-areas: #{map.get($tabletGrid, templateAreas)};
         }
+
         @media all and ($mobile) {
             grid-template-columns: #{map.get($mobileGrid, templateColumns)};
             grid-template-rows: #{map.get($mobileGrid, templateRows)};
@@ -214,6 +217,7 @@ a {
         @media all and not ($desktop) {
             padding: 0 1rem;
         }
+
         @media all and ($mobile) {
             margin: 0 auto;
         }
@@ -232,6 +236,7 @@ a {
             z-index: 1;
             grid-area: grid-sidebar-left;
             flex-direction: column;
+
             @media all and ($mobile) {
                 gap: 0;
                 align-items: center;
@@ -248,10 +253,12 @@ a {
             grid-area: grid-sidebar-right;
             margin-right: 0;
             flex-direction: column;
+
             @media all and ($mobile) {
                 margin-left: inherit;
                 margin-right: inherit;
             }
+
             @media all and not ($desktop) {
                 position: initial;
                 height: unset;
@@ -267,6 +274,7 @@ a {
                 }
             }
         }
+
         & .page-header,
         & .page-footer {
             margin-top: 1rem;
@@ -311,15 +319,15 @@ a {
 
 .footnotes {
     margin-top: 2rem;
-    border-top: 1px solid var(--lightgray);
+    border-top: 1px solid var(--border);
 }
 
 input[type='checkbox'] {
     transform: translateY(2px);
-    color: var(--secondary);
-    border: 1px solid var(--lightgray);
     border-radius: 3px;
-    background-color: var(--light);
+    border: 1px solid var(--border);
+    color: var(--foreground);
+    background-color: var(--background);
     position: relative;
     margin-inline-end: 0.2rem;
     margin-inline-start: -1.4rem;
@@ -328,8 +336,8 @@ input[type='checkbox'] {
     height: 16px;
 
     &:checked {
-        border-color: var(--secondary);
-        background-color: var(--secondary);
+        border-color: var(--red);
+        background-color: var(--red);
 
         &::after {
             content: '';
@@ -339,7 +347,7 @@ input[type='checkbox'] {
             width: 4px;
             height: 8px;
             display: block;
-            border: solid var(--light);
+            border: solid var(--foreground);
             border-width: 0 2px 2px 0;
             transform: rotate(45deg);
         }
@@ -348,9 +356,9 @@ input[type='checkbox'] {
 
 blockquote {
     margin: 1rem 0;
-    border-left: 3px solid var(--secondary);
     padding-left: 1rem;
     transition: border-color 0.2s ease;
+    border-left: 3px solid var(--border);
 }
 
 h1,
@@ -361,12 +369,12 @@ h5,
 h6,
 thead {
     font-family: var(--headerFont);
-    color: var(--dark);
+    color: var(--foreground);
     font-weight: revert;
     margin-bottom: 0;
 
     article > & > a[role='anchor'] {
-        color: var(--dark);
+        color: var(--foreground);
         background-color: transparent;
     }
 }
@@ -397,27 +405,44 @@ h6 {
 
 // typography improvements
 h1 {
-    font-size: 1.75rem;
+    color: var(--h1-color);
+    font-size: var(--h1-size);
     margin-top: 2.25rem;
     margin-bottom: 1rem;
 }
 
 h2 {
-    font-size: 1.4rem;
+    color: var(--h2-color);
+    font-size: var(--h2-size);
     margin-top: 1.9rem;
     margin-bottom: 1rem;
 }
 
 h3 {
-    font-size: 1.12rem;
+    color: var(--h3-color);
+    font-size: var(--h3-size);
     margin-top: 1.62rem;
     margin-bottom: 1rem;
+}
+
+h4 {
+    color: var(--h4-color);
+    font-size: var(--h4-size);
+}
+
+h5 {
+    color: var(--h5-color);
+    font-size: var(--h5-size);
+}
+
+h6 {
+    color: var(--h6-color);
+    font-size: var(--h6-size);
 }
 
 h4,
 h5,
 h6 {
-    font-size: 1rem;
     margin-top: 1.5rem;
     margin-bottom: 1rem;
 }
@@ -432,11 +457,11 @@ figure[data-rehype-pretty-code-figure] {
         font-family: var(--codeFont);
         font-size: 0.9rem;
         padding: 0.1rem 0.5rem;
-        border: 1px solid var(--lightgray);
+        border: 1px solid var(--border);
         width: fit-content;
         border-radius: 5px;
         margin-bottom: -0.5rem;
-        color: var(--darkgray);
+        color: var(--foreground);
     }
 
     & > pre {
@@ -449,7 +474,7 @@ pre {
     padding: 0 0.5rem;
     border-radius: 5px;
     overflow-x: auto;
-    border: 1px solid var(--lightgray);
+    border: 1px solid var(--border);
     position: relative;
 
     &:has(> code.mermaid) {
@@ -478,7 +503,7 @@ pre {
 
             &[data-highlighted-line] {
                 background-color: var(--highlight);
-                border-left: 3px solid var(--secondary);
+                border-left: 3px solid var(--border);
             }
 
             &::before {
@@ -504,11 +529,11 @@ pre {
 
 code {
     font-size: 0.9em;
-    color: var(--dark);
     font-family: var(--codeFont);
     border-radius: 5px;
     padding: 0.1rem 0.2rem;
-    background: var(--lightgray);
+    color: var(--foreground);
+    background: var(--background);
 }
 
 tbody,
@@ -539,7 +564,7 @@ p {
 th {
     text-align: left;
     padding: 0.4rem 0.7rem;
-    border-bottom: 2px solid var(--gray);
+    border-bottom: 2px solid var(--border);
 }
 
 td {
@@ -547,7 +572,7 @@ td {
 }
 
 tr {
-    border-bottom: 1px solid var(--lightgray);
+    border-bottom: 1px solid var(--border);
     &:last-child {
         border-bottom: none;
     }
@@ -570,7 +595,7 @@ hr {
     margin: 2rem auto;
     height: 1px;
     border: none;
-    background-color: var(--lightgray);
+    background-color: var(--border);
 }
 
 audio,
@@ -639,7 +664,7 @@ iframe.pdf {
     left: 0;
     width: 0;
     height: 3px;
-    background: var(--secondary);
+    background: var(--red);
     transition: width 0.2s ease;
     z-index: 9999;
 }

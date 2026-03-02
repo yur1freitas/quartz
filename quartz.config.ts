@@ -24,31 +24,59 @@ const config: QuartzConfig = {
             cdnCaching: true,
             typography: {
                 header: 'Schibsted Grotesk',
-                body: 'Source Sans Pro',
+                body: 'Recursive',
                 code: 'IBM Plex Mono'
             },
             colors: {
                 lightMode: {
-                    light: '#faf8f8',
-                    lightgray: '#e5e5e5',
-                    gray: '#b8b8b8',
-                    darkgray: '#4e4e4e',
-                    dark: '#2b2b2b',
-                    secondary: '#284b63',
-                    tertiary: '#84a59d',
-                    highlight: 'rgba(143, 159, 169, 0.15)',
-                    textHighlight: '#fff23688'
+                    highlight: '#64748b',
+                    textHighlight: '#fff23688',
+
+                    border: 'rgba(0, 0, 0, 0.1)',
+
+                    foreground: '#27272a',
+                    background: '#fefefe',
+
+                    link: '#64748b',
+                    linkHover: '#526077',
+
+                    red: '#e11d48',
+                    orange: ' #ea580c',
+                    yellow: '#eab308',
+                    lime: '#84cc16',
+                    green: ' #22c55e',
+                    cyan: '#2dd4bf',
+
+                    calloutPadding: '1rem',
+                    calloutBorderRadius: '0.5rem',
+                    calloutContentBackground: '#eeeef0',
+
+                    shadow: 'inset 0 -0.15rem 0.25rem 0.05rem rgba(0, 0, 0, 0.05)'
                 },
                 darkMode: {
-                    light: '#161618',
-                    lightgray: '#393639',
-                    gray: '#646464',
-                    darkgray: '#d4d4d4',
-                    dark: '#ebebec',
-                    secondary: '#7b97aa',
-                    tertiary: '#84a59d',
-                    highlight: 'rgba(143, 159, 169, 0.15)',
-                    textHighlight: '#b3aa0288'
+                    highlight: '#cbd5e1',
+                    textHighlight: '#b3aa0288',
+
+                    border: 'rgba(255, 255, 255, 0.05)',
+
+                    foreground: '#f1f5f9;',
+                    background: '#0f0f0f',
+
+                    link: '#cbd5e1',
+                    linkHover: '#b9c7d7',
+
+                    red: '#f43f5e',
+                    orange: '#fdba74',
+                    yellow: '#fde68a',
+                    lime: '#d9f99d',
+                    green: '#bbf7d0',
+                    cyan: '#a5f3fc',
+
+                    calloutPadding: '1rem',
+                    calloutBorderRadius: '0.5rem',
+                    calloutContentBackground: '#18181b',
+
+                    shadow: 'inset 0 -0.15rem 0.25rem 0.05rem rgba(0, 0, 0, 0.15)'
                 }
             }
         }
