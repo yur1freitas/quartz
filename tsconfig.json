@@ -15,8 +15,14 @@
         "noUnusedParameters": true,
         "esModuleInterop": true,
         "jsx": "react-jsx",
-        "jsxImportSource": "preact"
+        "jsxImportSource": "preact",
+
+        "paths": {
+            "~/*": ["./quartz/*"],
+            "~quartzLayout": ["./quartz.layout.ts"],
+            "~quartzConfig": ["./quartz.config.ts"]
+        }
     },
-    "include": ["**/*.ts", "**/*.tsx", "./package.json"],
+    "include": ["*.d.ts", "quartz", "./package.json"],
     "exclude": ["build/**/*.d.ts"]
 }

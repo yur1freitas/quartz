@@ -1,19 +1,22 @@
-import { ComponentChildren } from 'preact'
-import { Root } from 'hast'
+import type { ComponentChildren } from 'preact'
+import type { Root } from 'hast'
 
-import {
+import type { QuartzPluginData } from '~/types/vfile'
+import type {
     QuartzComponent,
     QuartzComponentConstructor,
     QuartzComponentProps
-} from '../types'
-import { PageList, SortFn } from '../PageList'
-import { concatenateResources } from '../../util/resources'
-import { htmlToJsx } from '../../util/jsx'
-import { trieFromAllFiles } from '../../util/ctx'
-import { QuartzPluginData } from '../../plugins/vfile'
-import { i18n } from '../../i18n'
+} from '~/types/jsx'
+
+import { trieFromAllFiles } from '~/utils/trieFromAllFiles'
+import { concatenateResources } from '~/utils/resources/concatenateResources'
+import { htmlToJsx } from '~/utils/jsx/htmlToJsx'
+import { i18n } from '~/i18n'
+
+import type { SortFn } from '../PageList'
 
 import style from '../styles/listPage.scss'
+import { PageList } from '../PageList'
 
 interface FolderContentOptions {
     /**

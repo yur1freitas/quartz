@@ -1,20 +1,18 @@
-import path from 'path'
+import path from 'node:path'
+
+import type { Root } from 'hast'
 
 import { visit } from 'unist-util-visit'
 import isAbsoluteUrl from 'is-absolute-url'
-import { Root } from 'hast'
 
-import { QuartzTransformerPlugin } from '../types'
-import {
-    FullSlug,
-    RelativeURL,
-    SimpleSlug,
-    TransformOptions,
-    stripSlashes,
-    simplifySlug,
-    splitAnchor,
-    transformLink
-} from '../../util/path'
+import type { TransformOptions } from '~/utils/path/transformLink'
+import type { QuartzTransformerPlugin } from '~/types/plugins'
+import type { FullSlug, RelativeURL, SimpleSlug } from '~/types/path'
+
+import { transformLink } from '~/utils/path/transformLink'
+import { stripSlashes } from '~/utils/path/stripSlashses'
+import { splitAnchor } from '~/utils/path/splitAnchor'
+import { simplifySlug } from '~/utils/path/simplifySlug'
 
 interface Options {
     /** How to resolve Markdown paths */
@@ -76,7 +74,8 @@ export const CrawlLinks: QuartzTransformerPlugin<Partial<Options>> = (
                                         properties: {
                                             'aria-hidden': 'true',
                                             'class': 'external-icon',
-                                            'style': 'max-width:0.8em;max-height:0.8em',
+                                            'style':
+                                                'max-width:0.8em;max-height:0.8em',
                                             'viewBox': '0 0 512 512'
                                         },
                                         children: [

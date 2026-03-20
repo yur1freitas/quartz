@@ -1,4 +1,4 @@
-import { getFullSlug } from '../../util/path'
+import { getFullSlug } from '~/utils/path/getFullSlug'
 
 const checkboxId = (index: number) => `${getFullSlug(window)}-checkbox-${index}`
 

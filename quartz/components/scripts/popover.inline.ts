@@ -1,7 +1,8 @@
 import { computePosition, flip, inline, shift } from '@floating-ui/dom'
 
+import { normalizeRelativeURLs } from '~/utils/path/normalizeRelativeURLs'
+
 import { fetchCanonical } from './util'
-import { normalizeRelativeURLs } from '../../util/path'
 
 const p = new DOMParser()
 let activeAnchor: HTMLAnchorElement | null = null

@@ -1,14 +1,16 @@
-import {
+import type {
     QuartzComponent,
     QuartzComponentConstructor,
     QuartzComponentProps
-} from './types'
-// @ts-ignore
-import script from './scripts/graph.inline'
-import { classNames } from '../util/lang'
+} from '~/types/jsx'
+
+import { classNames } from '~/utils/classNames'
+
 import { i18n } from '../i18n'
 
 import style from './styles/graph.scss'
+// @ts-ignore
+import script from './scripts/graph.inline'
 
 export interface D3Config {
     drag: boolean

@@ -1,8 +1,9 @@
+import type { PluggableList } from 'unified'
+
 import { visit } from 'unist-util-visit'
-import { PluggableList } from 'unified'
 import rehypeCitation from 'rehype-citation'
 
-import { QuartzTransformerPlugin } from '../types'
+import type { QuartzTransformerPlugin } from '~/types/plugins'
 
 export interface Options {
     bibliographyFile: string

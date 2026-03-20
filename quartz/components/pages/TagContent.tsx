@@ -1,24 +1,25 @@
-import { ComponentChildren } from 'preact'
-import { Root } from 'hast'
+import type { ComponentChildren } from 'preact'
+import type { Root } from 'hast'
 
-import {
+import type { QuartzPluginData } from '~/types/vfile'
+import type { FullSlug } from '~/types/path'
+import type {
     QuartzComponent,
     QuartzComponentConstructor,
     QuartzComponentProps
-} from '../types'
-import { PageList, SortFn } from '../PageList'
-import { concatenateResources } from '../../util/resources'
-import {
-    FullSlug,
-    getAllSegmentPrefixes,
-    resolveRelative,
-    simplifySlug
-} from '../../util/path'
-import { htmlToJsx } from '../../util/jsx'
-import { QuartzPluginData } from '../../plugins/vfile'
-import { i18n } from '../../i18n'
+} from '~/types/jsx'
+
+import { concatenateResources } from '~/utils/resources/concatenateResources'
+import { simplifySlug } from '~/utils/path/simplifySlug'
+import { resolveRelative } from '~/utils/path/resolveRelative'
+import { getAllSegmentPrefixes } from '~/utils/path/getAllSegmentsPrefixes'
+import { htmlToJsx } from '~/utils/jsx/htmlToJsx'
+import { i18n } from '~/i18n'
+
+import type { SortFn } from '../PageList'
 
 import style from '../styles/listPage.scss'
+import { PageList } from '../PageList'
 
 interface TagContentOptions {
     sort?: SortFn

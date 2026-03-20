@@ -1,16 +1,14 @@
-import {
+import type { FullSlug, SimpleSlug } from '~/types/path'
+import type {
     QuartzComponent,
     QuartzComponentConstructor,
     QuartzComponentProps
-} from './types'
-import {
-    FullSlug,
-    SimpleSlug,
-    resolveRelative,
-    simplifySlug
-} from '../util/path'
-import { classNames } from '../util/lang'
-import { trieFromAllFiles } from '../util/ctx'
+} from '~/types/jsx'
+
+import { trieFromAllFiles } from '~/utils/trieFromAllFiles'
+import { simplifySlug } from '~/utils/path/simplifySlug'
+import { resolveRelative } from '~/utils/path/resolveRelative'
+import { classNames } from '~/utils/classNames'
 
 import breadcrumbsStyle from './styles/breadcrumbs.scss'
 

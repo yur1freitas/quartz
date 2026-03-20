@@ -1,19 +1,18 @@
+import type { Root } from 'hast'
+
 import { toHtml } from 'hast-util-to-html'
-import { Root } from 'hast'
+
+import type { QuartzEmitterPlugin } from '~/types/plugins'
+import type { FilePath, FullSlug, SimpleSlug } from '~/types/path'
+import type { GlobalConfiguration } from '~/types/config'
+
+import { simplifySlug } from '~/utils/path/simplifySlug'
+import { joinSegments } from '~/utils/path/joinSegments'
+import { escapeHTML } from '~/utils/escape'
+import { getDate } from '~/utils/date/getDate'
+import { i18n } from '~/i18n'
 
 import { write } from './helpers'
-import { QuartzEmitterPlugin } from '../types'
-import {
-    FilePath,
-    FullSlug,
-    SimpleSlug,
-    joinSegments,
-    simplifySlug
-} from '../../util/path'
-import { escapeHTML } from '../../util/escape'
-import { i18n } from '../../i18n'
-import { getDate } from '../../components/Date'
-import { GlobalConfiguration } from '../../cfg'
 
 export type ContentIndexMap = Map<FullSlug, ContentDetails>
 export type ContentDetails = {

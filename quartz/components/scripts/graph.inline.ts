@@ -1,8 +1,7 @@
+import type { SimulationNodeDatum, SimulationLinkDatum, Simulation } from 'd3'
+
 import { Text, Graphics, Application, Container, Circle } from 'pixi.js'
 import {
-    SimulationNodeDatum,
-    SimulationLinkDatum,
-    Simulation,
     forceSimulation,
     forceManyBody,
     forceCenter,
@@ -16,16 +15,16 @@ import {
 } from 'd3'
 import { Group as TweenGroup, Tween as Tweened } from '@tweenjs/tween.js'
 
+import type { FullSlug, SimpleSlug } from '~/types/path'
+import type { ContentDetails } from '~/plugins/emitters/contentIndex'
+
+import { simplifySlug } from '~/utils/path/simplifySlug'
+import { resolveRelative } from '~/utils/path/resolveRelative'
+import { getFullSlug } from '~/utils/path/getFullSlug'
+
+import type { D3Config } from '../Graph'
+
 import { registerEscapeHandler, removeAllChildren } from './util'
-import { D3Config } from '../Graph'
-import {
-    FullSlug,
-    SimpleSlug,
-    getFullSlug,
-    resolveRelative,
-    simplifySlug
-} from '../../util/path'
-import type { ContentDetails } from '../../plugins/emitters/contentIndex'
 
 type GraphicsInfo = {
     color: string

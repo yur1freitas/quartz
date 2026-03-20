@@ -1,11 +1,14 @@
-import path from 'path'
-import fs from 'fs'
+import path from 'node:path'
+import fs from 'node:fs'
 
-import { QuartzEmitterPlugin } from '../types'
-import { FilePath, joinSegments, slugifyFilePath } from '../../util/path'
-import { glob } from '../../util/glob'
-import { Argv } from '../../util/ctx'
-import { QuartzConfig } from '../../cfg'
+import type { QuartzEmitterPlugin } from '~/types/plugins'
+import type { FilePath } from '~/types/path'
+import type { Argv } from '~/types/ctx'
+import type { QuartzConfig } from '~/types/config'
+
+import { sluggifyFilePath } from '~/utils/path/sluggifyFilePath'
+import { joinSegments } from '~/utils/path/joinSegments'
+import { glob } from '~/utils/glob'
 
 const filesToCopy = async (argv: Argv, cfg: QuartzConfig) => {
     // glob all non MD files in content folder and copy it over
@@ -18,7 +21,7 @@ const filesToCopy = async (argv: Argv, cfg: QuartzConfig) => {
 const copyFile = async (argv: Argv, fp: FilePath) => {
     const src = joinSegments(argv.directory, fp) as FilePath
 
-    const name = slugifyFilePath(fp)
+    const name = sluggifyFilePath(fp)
     const dest = joinSegments(argv.output, name) as FilePath
 
     // ensure dir exists
@@ -49,7 +52,7 @@ export const Assets: QuartzEmitterPlugin = () => {
                 ) {
                     yield copyFile(ctx.argv, changeEvent.path)
                 } else if (changeEvent.type === 'delete') {
-                    const name = slugifyFilePath(changeEvent.path)
+                    const name = sluggifyFilePath(changeEvent.path)
                     const dest = joinSegments(ctx.argv.output, name) as FilePath
                     await fs.promises.unlink(dest)
                 }

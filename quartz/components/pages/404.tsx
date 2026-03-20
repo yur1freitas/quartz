@@ -1,9 +1,10 @@
-import {
+import type {
     QuartzComponent,
     QuartzComponentConstructor,
     QuartzComponentProps
-} from '../types'
-import { i18n } from '../../i18n'
+} from '~/types/jsx'
+
+import { i18n } from '~/i18n'
 
 const NotFound: QuartzComponent = ({ cfg }: QuartzComponentProps) => {
     // If baseUrl contains a pathname after the domain, use this as the home link

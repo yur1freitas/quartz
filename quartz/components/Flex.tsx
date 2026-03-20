@@ -1,10 +1,11 @@
-import {
+import type {
     QuartzComponent,
     QuartzComponentConstructor,
     QuartzComponentProps
-} from './types'
-import { concatenateResources } from '../util/resources'
-import { classNames } from '../util/lang'
+} from '~/types/jsx'
+
+import { concatenateResources } from '~/utils/resources/concatenateResources'
+import { classNames } from '~/utils/classNames'
 
 type FlexConfig = {
     components: {

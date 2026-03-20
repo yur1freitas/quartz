@@ -1,30 +1,31 @@
-import { styleText } from 'util'
-import { Readable } from 'stream'
+import type { Readable } from 'node:stream'
+
+import { styleText } from 'node:util'
 import fs from 'node:fs/promises'
 
+import type { SatoriOptions } from 'satori'
+
 import sharp from 'sharp'
-import satori, { SatoriOptions } from 'satori'
+import satori from 'satori'
+
+import type { ImageOptions, SocialImageOptions } from '~/utils/jsx/defaultImage'
+import type { QuartzPluginData } from '~/types/vfile'
+import type { QuartzEmitterPlugin } from '~/types/plugins'
+import type { FullSlug } from '~/types/path'
+import type { BuildCtx } from '~/types/ctx'
+
+import { joinSegments } from '~/utils/path/joinSegments'
+import { isAbsoluteURL } from '~/utils/path/isAbsoluteURL'
+import { getFileExtension } from '~/utils/path/getFileExtension'
+import { getSatoriFonts } from '~/utils/jsx/getSatoriFonts'
+import { defaultImage } from '~/utils/jsx/defaultImage'
+import { unescapeHTML } from '~/utils/escape'
+import { loadEmoji } from '~/utils/emoji/loadEmoji'
+import { getIconCode } from '~/utils/emoji/getIconCode'
+import { i18n } from '~/i18n'
+import { QUARTZ } from '~/consts'
 
 import { write } from './helpers'
-import { QuartzPluginData } from '../vfile'
-import { QuartzEmitterPlugin } from '../types'
-import {
-    FullSlug,
-    getFileExtension,
-    isAbsoluteURL,
-    joinSegments,
-    QUARTZ
-} from '../../util/path'
-import {
-    ImageOptions,
-    SocialImageOptions,
-    defaultImage,
-    getSatoriFonts
-} from '../../util/og'
-import { unescapeHTML } from '../../util/escape'
-import { loadEmoji, getIconCode } from '../../util/emoji'
-import { BuildCtx } from '../../util/ctx'
-import { i18n } from '../../i18n'
 
 const defaultOptions: SocialImageOptions = {
     colorScheme: 'lightMode',

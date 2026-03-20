@@ -1,10 +1,10 @@
-import { styleText } from 'util'
-import path from 'path'
-import fs from 'fs'
+import { styleText } from 'node:util'
+import path from 'node:path'
+import fs from 'node:fs'
 
 import { Repository } from '@napi-rs/simple-git'
 
-import { QuartzTransformerPlugin } from '../types'
+import type { QuartzTransformerPlugin } from '~/types/plugins'
 
 export interface Options {
     priority: ('frontmatter' | 'git' | 'filesystem')[]

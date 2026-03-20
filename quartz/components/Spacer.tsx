@@ -1,5 +1,9 @@
-import { QuartzComponentConstructor, QuartzComponentProps } from './types'
-import { classNames } from '../util/lang'
+import type {
+    QuartzComponentConstructor,
+    QuartzComponentProps
+} from '~/types/jsx'
+
+import { classNames } from '~/utils/classNames'
 
 function Spacer({ displayClass }: QuartzComponentProps) {
     return <div class={classNames(displayClass, 'spacer')}></div>

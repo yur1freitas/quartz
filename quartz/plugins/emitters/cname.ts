@@ -1,8 +1,9 @@
-import { styleText } from 'util'
+import { styleText } from 'node:util'
+
+import type { QuartzEmitterPlugin } from '~/types/plugins'
+import type { FullSlug } from '~/types/path'
 
 import { write } from './helpers'
-import { QuartzEmitterPlugin } from '../types'
-import { FullSlug } from '../../util/path'
 
 export function extractDomainFromBaseUrl(baseUrl: string) {
     const url = new URL(`https://${baseUrl}`)

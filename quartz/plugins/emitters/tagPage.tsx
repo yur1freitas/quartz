@@ -1,29 +1,24 @@
+import type { ProcessedContent, QuartzPluginData } from '~/types/vfile'
+import type { StaticResources } from '~/types/resources'
+import type { QuartzEmitterPlugin } from '~/types/plugins'
+import type { FullSlug } from '~/types/path'
+import type { Locales } from '~/types/locales'
+import type { FullPageLayout } from '~/types/layout'
+import type { QuartzComponentProps } from '~/types/jsx'
+import type { BuildCtx } from '~/types/ctx'
+
+import { defaultListPageLayout, sharedPageComponents } from '~quartzLayout'
+import { defaultProcessedContent } from '~/vfile'
+import { pathToRoot } from '~/utils/path/pathToRoot'
+import { joinSegments } from '~/utils/path/joinSegments'
+import { getAllSegmentPrefixes } from '~/utils/path/getAllSegmentsPrefixes'
+import { i18n } from '~/i18n'
+import { pageResources, renderPage } from '~/components/renderPage'
+import HeaderConstructor from '~/components/Header'
+import BodyConstructor from '~/components/Body'
+import { TagContent } from '~/components'
+
 import { write } from './helpers'
-import {
-    ProcessedContent,
-    QuartzPluginData,
-    defaultProcessedContent
-} from '../vfile'
-import { QuartzEmitterPlugin } from '../types'
-import { StaticResources } from '../../util/resources'
-import {
-    FullSlug,
-    getAllSegmentPrefixes,
-    joinSegments,
-    pathToRoot
-} from '../../util/path'
-import { BuildCtx } from '../../util/ctx'
-import { i18n, TRANSLATIONS } from '../../i18n'
-import { QuartzComponentProps } from '../../components/types'
-import { pageResources, renderPage } from '../../components/renderPage'
-import HeaderConstructor from '../../components/Header'
-import BodyConstructor from '../../components/Body'
-import { TagContent } from '../../components'
-import { FullPageLayout } from '../../cfg'
-import {
-    defaultListPageLayout,
-    sharedPageComponents
-} from '../../../quartz.layout'
 
 interface TagPageOptions extends FullPageLayout {
     sort?: (f1: QuartzPluginData, f2: QuartzPluginData) => number
@@ -32,7 +27,7 @@ interface TagPageOptions extends FullPageLayout {
 function computeTagInfo(
     allFiles: QuartzPluginData[],
     content: ProcessedContent[],
-    locale: keyof typeof TRANSLATIONS
+    locale: Locales
 ): [Set<string>, Record<string, ProcessedContent>] {
     const tags: Set<string> = new Set(
         allFiles

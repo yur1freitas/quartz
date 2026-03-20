@@ -1,14 +1,15 @@
+import type { Options as MathjaxOptions } from 'rehype-mathjax/svg'
+import type { KatexOptions } from 'katex'
+//@ts-ignore
+import type { Options as TypstOptions } from '@myriaddreamin/rehype-typst'
+
 import remarkMath from 'remark-math'
-import { Options as MathjaxOptions } from 'rehype-mathjax/svg'
 import rehypeMathjax from 'rehype-mathjax/svg'
 import rehypeKatex from 'rehype-katex'
-import { KatexOptions } from 'katex'
-//@ts-ignore
-import { Options as TypstOptions } from '@myriaddreamin/rehype-typst'
 //@ts-ignore
 import rehypeTypst from '@myriaddreamin/rehype-typst'
 
-import { QuartzTransformerPlugin } from '../types'
+import type { QuartzTransformerPlugin } from '~/types/plugins'
 
 interface Options {
     renderEngine: 'katex' | 'mathjax' | 'typst'
@@ -41,7 +42,7 @@ export const Latex: QuartzTransformerPlugin<Partial<Options>> = (opts) => {
                             {
                                 output: 'html',
                                 macros,
-                                ...(opts?.katexOptions ?? {})
+                                ...opts?.katexOptions
                             }
                         ]
                     ]
@@ -55,9 +56,9 @@ export const Latex: QuartzTransformerPlugin<Partial<Options>> = (opts) => {
                         [
                             rehypeMathjax,
                             {
-                                ...(opts?.mathJaxOptions ?? {}),
+                                ...opts?.mathJaxOptions,
                                 tex: {
-                                    ...(opts?.mathJaxOptions?.tex ?? {}),
+                                    ...opts?.mathJaxOptions?.tex,
                                     macros
                                 }
                             }

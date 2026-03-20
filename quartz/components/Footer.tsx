@@ -1,8 +1,9 @@
-import {
+import type {
     QuartzComponent,
     QuartzComponentConstructor,
     QuartzComponentProps
-} from './types'
+} from '~/types/jsx'
+
 import { i18n } from '../i18n'
 import { version } from '../../package.json'
 
