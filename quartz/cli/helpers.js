@@ -1,10 +1,10 @@
-import { styleText } from 'util'
-import fs from 'fs'
-import { spawnSync } from 'child_process'
+import { styleText } from 'node:util'
+import { rm, cp } from 'node:fs/promises'
+import { spawnSync } from 'node:child_process'
 
 import { isCancel, outro } from '@clack/prompts'
 
-import { contentCacheFolder } from './constants.js'
+import { CONTENT_CACHE_FOLDER } from './consts.js'
 
 export function escapePath(fp) {
     return fp
@@ -24,14 +24,16 @@ export function exitIfCancel(val) {
 }
 
 export async function stashContentFolder(contentFolder) {
-    await fs.promises.rm(contentCacheFolder, { force: true, recursive: true })
-    await fs.promises.cp(contentFolder, contentCacheFolder, {
+    await rm(CONTENT_CACHE_FOLDER, { force: true, recursive: true })
+
+    await cp(contentFolder, CONTENT_CACHE_FOLDER, {
         force: true,
         recursive: true,
         verbatimSymlinks: true,
         preserveTimestamps: true
     })
-    await fs.promises.rm(contentFolder, { force: true, recursive: true })
+
+    await rm(contentFolder, { force: true, recursive: true })
 }
 
 export function gitPull(origin, branch) {
@@ -44,9 +46,11 @@ export function gitPull(origin, branch) {
         'ours',
         '--no-edit'
     ]
+
     const out = spawnSync('git', ['pull', ...flags, origin, branch], {
         stdio: 'inherit'
     })
+
     if (out.stderr) {
         throw new Error(
             styleText('red', `Error while pulling updates: ${out.stderr}`)
@@ -57,12 +61,14 @@ export function gitPull(origin, branch) {
 }
 
 export async function popContentFolder(contentFolder) {
-    await fs.promises.rm(contentFolder, { force: true, recursive: true })
-    await fs.promises.cp(contentCacheFolder, contentFolder, {
+    await rm(contentFolder, { force: true, recursive: true })
+
+    await cp(CONTENT_CACHE_FOLDER, contentFolder, {
         force: true,
         recursive: true,
         verbatimSymlinks: true,
         preserveTimestamps: true
     })
-    await fs.promises.rm(contentCacheFolder, { force: true, recursive: true })
+
+    await rm(CONTENT_CACHE_FOLDER, { force: true, recursive: true })
 }

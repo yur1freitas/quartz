@@ -1,12 +1,11 @@
 import micromorph from 'micromorph'
 
+import type { FullSlug, RelativeURL } from '~/types/path'
+
+import { normalizeRelativeURLs } from '~/utils/path/normalizeRelativeURLs'
+import { getFullSlug } from '~/utils/path/getFullSlug'
+
 import { fetchCanonical } from './util'
-import {
-    FullSlug,
-    RelativeURL,
-    getFullSlug,
-    normalizeRelativeURLs
-} from '../../util/path'
 
 // adapted from `micromorph`
 // https://github.com/natemoo-re/micromorph
@@ -219,7 +218,8 @@ if (!customElements.get('route-announcer')) {
     const attrs = {
         'aria-live': 'assertive',
         'aria-atomic': 'true',
-        'style': 'position: absolute; left: 0; top: 0; clip: rect(0 0 0 0); clip-path: inset(50%); overflow: hidden; white-space: nowrap; width: 1px; height: 1px'
+        'style':
+            'position: absolute; left: 0; top: 0; clip: rect(0 0 0 0); clip-path: inset(50%); overflow: hidden; white-space: nowrap; width: 1px; height: 1px'
     }
 
     customElements.define(

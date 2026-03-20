@@ -1,8 +1,10 @@
-import { toString } from 'hast-util-to-string'
-import { Root as HTMLRoot } from 'hast'
+import type { Root as HTMLRoot } from 'hast'
 
-import { QuartzTransformerPlugin } from '../types'
-import { escapeHTML } from '../../util/escape'
+import { toString } from 'hast-util-to-string'
+
+import type { QuartzTransformerPlugin } from '~/types/plugins'
+
+import { escapeHTML } from '~/utils/escape'
 
 export interface Options {
     descriptionLength: number
@@ -17,7 +19,7 @@ const defaultOptions: Options = {
 }
 
 const urlRegex = new RegExp(
-    /(https?:\/\/)?(?<domain>([\da-z\.-]+)\.([a-z\.]{2,6})(:\d+)?)(?<path>[\/\w\.-]*)(\?[\/\w\.=&;-]*)?/,
+    /(https?:\/\/)?(?<domain>([\da-z.-]+)\.([a-z.]{2,6})(:\d+)?)(?<path>[/\w.-]*)(\?[/\w.=&;-]*)?/,
     'g'
 )
 

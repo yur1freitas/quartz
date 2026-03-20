@@ -1,12 +1,14 @@
-import FlexSearch, { DefaultDocumentSearchResults } from 'flexsearch'
+import type { DefaultDocumentSearchResults } from 'flexsearch'
+
+import FlexSearch from 'flexsearch'
+
+import type { FullSlug } from '~/types/path'
+import type { ContentDetails } from '~/plugins/emitters/contentIndex'
+
+import { resolveRelative } from '~/utils/path/resolveRelative'
+import { normalizeRelativeURLs } from '~/utils/path/normalizeRelativeURLs'
 
 import { registerEscapeHandler, removeAllChildren } from './util'
-import {
-    FullSlug,
-    normalizeRelativeURLs,
-    resolveRelative
-} from '../../util/path'
-import { ContentDetails } from '../../plugins/emitters/contentIndex'
 
 interface Item {
     id: number

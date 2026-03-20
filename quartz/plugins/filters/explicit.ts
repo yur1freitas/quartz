@@ -1,4 +1,4 @@
-import { QuartzFilterPlugin } from '../types'
+import type { QuartzFilterPlugin } from '~/types/plugins'
 
 export const ExplicitPublish: QuartzFilterPlugin = () => ({
     name: 'ExplicitPublish',

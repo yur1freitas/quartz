@@ -1,17 +1,19 @@
-import {
+import type { FileTrieNode } from '~/utils/models/FileTrieNode'
+import type {
     QuartzComponent,
     QuartzComponentConstructor,
     QuartzComponentProps
-} from './types'
-// @ts-ignore
-import script from './scripts/explorer.inline'
-import OverflowListFactory from './OverflowList'
-import { concatenateResources } from '../util/resources'
-import { classNames } from '../util/lang'
-import { FileTrieNode } from '../util/fileTrie'
+} from '~/types/jsx'
+
+import { concatenateResources } from '~/utils/resources/concatenateResources'
+import { classNames } from '~/utils/classNames'
+
 import { i18n } from '../i18n'
 
 import style from './styles/explorer.scss'
+// @ts-ignore
+import script from './scripts/explorer.inline'
+import OverflowListFactory from './OverflowList'
 
 type OrderEntries = 'sort' | 'filter' | 'map'
 

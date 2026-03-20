@@ -1,11 +1,19 @@
-import { styleText } from 'util'
-import path from 'path'
-import http from 'http'
-import { rm } from 'fs/promises'
-import fs from 'fs'
-import { promises } from 'fs'
-import { randomUUID } from 'crypto'
-import { execSync, spawnSync } from 'child_process'
+import { styleText } from 'node:util'
+import path from 'node:path'
+import http from 'node:http'
+import {
+    rm,
+    lstat,
+    unlink,
+    writeFile,
+    symlink,
+    readFile,
+    cp
+} from 'node:fs/promises'
+import { promises } from 'node:fs'
+import { existsSync, lstatSync } from 'node:fs'
+import { randomUUID } from 'node:crypto'
+import { execSync, spawnSync } from 'node:child_process'
 
 import { WebSocketServer } from 'ws'
 import serveHandler from 'serve-handler'
@@ -28,11 +36,11 @@ import {
     UPSTREAM_NAME,
     QUARTZ_SOURCE_BRANCH,
     ORIGIN_NAME,
-    version,
-    fp,
-    cacheFile,
-    cwd
-} from './constants.js'
+    VERSION,
+    FILE_PATH,
+    CACHE_FILE,
+    CWD
+} from './consts.js'
 import { CreateArgv } from './args.js'
 
 /**
@@ -40,8 +48,8 @@ import { CreateArgv } from './args.js'
  * @param contentPath path to resolve
  */
 function resolveContentPath(contentPath) {
-    if (path.isAbsolute(contentPath)) return path.relative(cwd, contentPath)
-    return path.join(cwd, contentPath)
+    if (path.isAbsolute(contentPath)) return path.relative(CWD, contentPath)
+    return path.join(CWD, contentPath)
 }
 
 /**
@@ -50,7 +58,7 @@ function resolveContentPath(contentPath) {
  */
 export async function handleCreate(argv) {
     console.log()
-    intro(styleText(['bgGreen', 'black'], ` Quartz v${version} `))
+    intro(styleText(['bgGreen', 'black'], ` Quartz v${VERSION} `))
     const contentFolder = resolveContentPath(argv.directory)
     let setupStrategy = argv.strategy?.toLowerCase()
     let linkResolutionStrategy = argv.links?.toLowerCase()
@@ -79,7 +87,7 @@ export async function handleCreate(argv) {
                 )
                 process.exit(1)
             } else {
-                if (!fs.existsSync(sourceDirectory)) {
+                if (!existsSync(sourceDirectory)) {
                     outro(
                         styleText(
                             'red',
@@ -90,7 +98,7 @@ export async function handleCreate(argv) {
                         )
                     )
                     process.exit(1)
-                } else if (!fs.lstatSync(sourceDirectory).isDirectory()) {
+                } else if (!lstatSync(sourceDirectory).isDirectory()) {
                     outro(
                         styleText(
                             'red',
@@ -129,17 +137,17 @@ export async function handleCreate(argv) {
     }
 
     async function rmContentFolder() {
-        const contentStat = await fs.promises.lstat(contentFolder)
+        const contentStat = await lstat(contentFolder)
         if (contentStat.isSymbolicLink()) {
-            await fs.promises.unlink(contentFolder)
+            await unlink(contentFolder)
         } else {
             await rm(contentFolder, { recursive: true, force: true })
         }
     }
 
     const gitkeepPath = path.join(contentFolder, '.gitkeep')
-    if (fs.existsSync(gitkeepPath)) {
-        await fs.promises.unlink(gitkeepPath)
+    if (existsSync(gitkeepPath)) {
+        await unlink(gitkeepPath)
     }
     if (setupStrategy === 'copy' || setupStrategy === 'symlink') {
         let originalFolder = sourceDirectory
@@ -155,9 +163,9 @@ export async function handleCreate(argv) {
                             'On most terminal emulators, you can drag and drop a folder into the window and it will paste the full path',
                         validate(fp) {
                             const fullPath = escapePath(fp)
-                            if (!fs.existsSync(fullPath)) {
+                            if (!existsSync(fullPath)) {
                                 return "The given path doesn't exist"
-                            } else if (!fs.lstatSync(fullPath).isDirectory()) {
+                            } else if (!lstatSync(fullPath).isDirectory()) {
                                 return 'The given path is not a folder'
                             }
                         }
@@ -168,15 +176,15 @@ export async function handleCreate(argv) {
 
         await rmContentFolder()
         if (setupStrategy === 'copy') {
-            await fs.promises.cp(originalFolder, contentFolder, {
+            await cp(originalFolder, contentFolder, {
                 recursive: true,
                 preserveTimestamps: true
             })
         } else if (setupStrategy === 'symlink') {
-            await fs.promises.symlink(originalFolder, contentFolder, 'dir')
+            await symlink(originalFolder, contentFolder, 'dir')
         }
     } else if (setupStrategy === 'new') {
-        await fs.promises.writeFile(
+        await writeFile(
             path.join(contentFolder, 'index.md'),
             `---
 title: Welcome to Quartz
@@ -214,15 +222,15 @@ See the [documentation](https://quartz.jzhao.xyz) for how to get started.
     }
 
     // now, do config changes
-    const configFilePath = path.join(cwd, 'quartz.config.ts')
-    let configContent = await fs.promises.readFile(configFilePath, {
+    const configFilePath = path.join(CWD, 'quartz.config.ts')
+    let configContent = await readFile(configFilePath, {
         encoding: 'utf-8'
     })
     configContent = configContent.replace(
         /markdownLinkResolution: '(.+)'/,
         `markdownLinkResolution: '${linkResolutionStrategy}'`
     )
-    await fs.promises.writeFile(configFilePath, configContent)
+    await writeFile(configFilePath, configContent)
 
     // setup remote
     execSync(
@@ -247,11 +255,11 @@ export async function handleBuild(argv) {
     }
 
     console.log(
-        `\n${styleText(['bgGreen', 'black'], ` Quartz v${version} `)} \n`
+        `\n${styleText(['bgGreen', 'black'], ` Quartz v${VERSION} `)} \n`
     )
     const ctx = await esbuild.context({
-        entryPoints: [fp],
-        outfile: cacheFile,
+        entryPoints: [FILE_PATH],
+        outfile: CACHE_FILE,
         bundle: true,
         keepNames: true,
         minifyWhitespace: true,
@@ -343,7 +351,7 @@ export async function handleBuild(argv) {
 
         const result = await ctx.rebuild().catch((err) => {
             console.error(
-                `${styleText('red', "Couldn't parse Quartz configuration:")} ${fp}`
+                `${styleText('red', "Couldn't parse Quartz configuration:")} ${FILE_PATH}`
             )
             console.log(`Reason: ${styleText('grey', err)}`)
             process.exit(1)
@@ -366,9 +374,9 @@ export async function handleBuild(argv) {
         // bypass module cache
         // https://github.com/nodejs/modules/issues/307
         const { default: buildQuartz } = await import(
-            `../../${cacheFile}?update=${randomUUID()}`
+            `../../${CACHE_FILE}?update=${randomUUID()}`
         )
-        // ^ this import is relative, so base "cacheFile" path can't be used
+        // ^ this import is relative, so base "CACHE_FILE" path can't be used
 
         cleanupBuild = await buildQuartz(argv, buildMutex, clientRefresh)
         clientRefresh()
@@ -462,7 +470,7 @@ export async function handleBuild(argv) {
                 // /trailing/
                 // does /trailing/index.html exist? if so, serve it
                 const indexFp = path.posix.join(fp, 'index.html')
-                if (fs.existsSync(path.posix.join(argv.output, indexFp))) {
+                if (existsSync(path.posix.join(argv.output, indexFp))) {
                     req.url = fp
                     return serve()
                 }
@@ -472,7 +480,7 @@ export async function handleBuild(argv) {
                 if (path.extname(base) === '') {
                     base += '.html'
                 }
-                if (fs.existsSync(path.posix.join(argv.output, base))) {
+                if (existsSync(path.posix.join(argv.output, base))) {
                     return redirect(fp.slice(0, -1))
                 }
             } else {
@@ -482,14 +490,14 @@ export async function handleBuild(argv) {
                 if (path.extname(base) === '') {
                     base += '.html'
                 }
-                if (fs.existsSync(path.posix.join(argv.output, base))) {
+                if (existsSync(path.posix.join(argv.output, base))) {
                     req.url = fp
                     return serve()
                 }
 
                 // does /regular/index.html exist? if so, redirect to /regular/
                 let indexFp = path.posix.join(fp, 'index.html')
-                if (fs.existsSync(path.posix.join(argv.output, indexFp))) {
+                if (existsSync(path.posix.join(argv.output, indexFp))) {
                     return redirect(fp + '/')
                 }
             }
@@ -536,14 +544,18 @@ export async function handleBuild(argv) {
  */
 export async function handleUpdate(argv) {
     const contentFolder = resolveContentPath(argv.directory)
+
     console.log(
-        `\n${styleText(['bgGreen', 'black'], ` Quartz v${version} `)} \n`
+        `\n${styleText(['bgGreen', 'black'], ` Quartz v${VERSION} `)} \n`
     )
     console.log('Backing up your content')
+
     execSync(
         `git remote show upstream || git remote add upstream https://github.com/jackyzha0/quartz.git`
     )
+
     await stashContentFolder(contentFolder)
+
     console.log(
         "Pulling updates... you may need to resolve some `git` conflicts if you've made changes to components or plugins."
     )
@@ -579,6 +591,7 @@ export async function handleUpdate(argv) {
     }
 
     const res = spawnSync('npm', ['i'], opts)
+
     if (res.status === 0) {
         console.log(styleText('green', 'Done!'))
     } else {
@@ -606,15 +619,19 @@ export async function handleRestore(argv) {
  */
 export async function handleSync(argv) {
     const contentFolder = resolveContentPath(argv.directory)
+
     console.log(
-        `\n${styleText(['bgGreen', 'black'], ` Quartz v${version} `)}\n`
+        `\n${styleText(['bgGreen', 'black'], ` Quartz v${VERSION} `)}\n`
     )
+
     console.log('Backing up your content')
 
     if (argv.commit) {
-        const contentStat = await fs.promises.lstat(contentFolder)
+        const contentStat = await lstat(contentFolder)
+
         if (contentStat.isSymbolicLink()) {
-            const linkTarg = await fs.promises.readlink(contentFolder)
+            const linkTarg = await readlink(contentFolder)
+
             console.log(
                 styleText(
                     'yellow',
@@ -626,7 +643,7 @@ export async function handleSync(argv) {
             await stashContentFolder(contentFolder)
 
             // follow symlink and copy content
-            await fs.promises.cp(linkTarg, contentFolder, {
+            await cp(linkTarg, contentFolder, {
                 recursive: true,
                 preserveTimestamps: true
             })
@@ -636,7 +653,9 @@ export async function handleSync(argv) {
             dateStyle: 'medium',
             timeStyle: 'short'
         })
+
         const commitMessage = argv.message ?? `Quartz sync: ${currentTimestamp}`
+
         spawnSync('git', ['add', '.'], { stdio: 'inherit' })
         spawnSync('git', ['commit', '-m', commitMessage], { stdio: 'inherit' })
 

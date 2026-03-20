@@ -1,20 +1,19 @@
-import {
+import type { FullSlug } from '~/types/path'
+import type {
     QuartzComponent,
     QuartzComponentConstructor,
     QuartzComponentProps
-} from './types'
-import { googleFontHref, googleFontSubsetHref } from '../util/theme'
-import {
-    CSSResourceToStyleElement,
-    JSResourceToScriptElement
-} from '../util/resources'
-import {
-    FullSlug,
-    getFileExtension,
-    joinSegments,
-    pathToRoot
-} from '../util/path'
-import { unescapeHTML } from '../util/escape'
+} from '~/types/jsx'
+
+import { googleFontSubsetHref } from '~/utils/theme/googleFontSubsetHref'
+import { googleFontHref } from '~/utils/theme/googleFontHref'
+import { JSResourceToScriptElement } from '~/utils/resources/JSResourceToScriptElement'
+import { CSSResourceToStyleElement } from '~/utils/resources/CSSResourceToStyleElement'
+import { pathToRoot } from '~/utils/path/pathToRoot'
+import { joinSegments } from '~/utils/path/joinSegments'
+import { getFileExtension } from '~/utils/path/getFileExtension'
+import { unescapeHTML } from '~/utils/escape'
+
 import { CustomOgImagesEmitterName } from '../plugins/emitters/ogImage'
 import { i18n } from '../i18n'
 export default (() => {

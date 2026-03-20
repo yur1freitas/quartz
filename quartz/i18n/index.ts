@@ -1,3 +1,6 @@
+import type { Translation } from '~/types/translation'
+import type { Locales } from '~/types/locales'
+
 import zhTw from './locales/zh-TW'
 import zh from './locales/zh-CN'
 import vi from './locales/vi-VN'
@@ -24,7 +27,6 @@ import fa from './locales/fa-IR'
 import es from './locales/es-ES'
 import enUs from './locales/en-US'
 import enGb from './locales/en-GB'
-import { Translation, CalloutTranslation } from './locales/definition'
 import de from './locales/de-DE'
 import cs from './locales/cs-CZ'
 import ca from './locales/ca-ES'
@@ -85,7 +87,6 @@ export const TRANSLATIONS = {
 } as const
 
 export const defaultTranslation = 'en-US'
-export const i18n = (locale: ValidLocale): Translation =>
+
+export const i18n = (locale: Locales): Translation =>
     TRANSLATIONS[locale ?? defaultTranslation]
-export type ValidLocale = keyof typeof TRANSLATIONS
-export type ValidCallout = keyof CalloutTranslation

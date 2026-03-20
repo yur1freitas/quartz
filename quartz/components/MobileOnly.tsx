@@ -1,8 +1,8 @@
-import {
+import type {
     QuartzComponent,
     QuartzComponentConstructor,
     QuartzComponentProps
-} from './types'
+} from '~/types/jsx'
 
 export default ((component: QuartzComponent) => {
     const Component = component

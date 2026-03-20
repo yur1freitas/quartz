@@ -1,24 +1,24 @@
 import { Features, transform } from 'lightningcss'
 import { transform as transpile } from 'esbuild'
 
-import { write } from './helpers'
-import { QuartzEmitterPlugin } from '../types'
-import {
-    googleFontHref,
-    googleFontSubsetHref,
-    joinStyles,
-    processGoogleFonts
-} from '../../util/theme'
-import { FullSlug, joinSegments } from '../../util/path'
-import { BuildCtx } from '../../util/ctx'
-import { QuartzComponent } from '../../components/types'
-// @ts-ignore
-import spaRouterScript from '../../components/scripts/spa.inline'
-// @ts-ignore
-import popoverScript from '../../components/scripts/popover.inline'
+import type { QuartzEmitterPlugin } from '~/types/plugins'
+import type { FullSlug } from '~/types/path'
+import type { QuartzComponent } from '~/types/jsx'
+import type { BuildCtx } from '~/types/ctx'
 
-import styles from '../../styles/custom.scss'
-import popoverStyle from '../../components/styles/popover.scss'
+import { processGoogleFonts } from '~/utils/theme/processGoogleFonts'
+import { joinStyles } from '~/utils/theme/joinStyles'
+import { googleFontSubsetHref } from '~/utils/theme/googleFontSubsetHref'
+import { googleFontHref } from '~/utils/theme/googleFontHref'
+import { joinSegments } from '~/utils/path/joinSegments'
+import styles from '~/styles/custom.scss'
+import popoverStyle from '~/components/styles/popover.scss'
+// @ts-ignore
+import spaRouterScript from '~/components/scripts/spa.inline'
+// @ts-ignore
+import popoverScript from '~/components/scripts/popover.inline'
+
+import { write } from './helpers'
 
 type ComponentResources = {
     css: string[]
@@ -115,7 +115,7 @@ function addGlobalPageResources(
           gtag('event', 'page_view', { page_title: document.title, page_location: location.href });
         });
       };
-      
+
       document.head.appendChild(gtagScript);
     `)
     } else if (cfg.analytics?.provider === 'plausible') {
@@ -194,7 +194,7 @@ function addGlobalPageResources(
           window.tinylytics.triggerUpdate();
         });
       };
-      
+
       document.head.appendChild(tinylyticsScript);
     `)
     } else if (cfg.analytics?.provider === 'cabin') {

@@ -1,24 +1,23 @@
-import { styleText } from 'util'
-import path from 'path'
+import { styleText } from 'node:util'
+import path from 'node:path'
 
-import { Node } from 'unist'
+import type { Node } from 'unist'
+
+import type { QuartzPluginData } from '~/types/vfile'
+import type { StaticResources } from '~/types/resources'
+import type { QuartzEmitterPlugin } from '~/types/plugins'
+import type { FullPageLayout } from '~/types/layout'
+import type { QuartzComponentProps } from '~/types/jsx'
+import type { BuildCtx } from '~/types/ctx'
+
+import { defaultContentPageLayout, sharedPageComponents } from '~quartzLayout'
+import { pathToRoot } from '~/utils/path/pathToRoot'
+import { pageResources, renderPage } from '~/components/renderPage'
+import HeaderConstructor from '~/components/Header'
+import BodyConstructor from '~/components/Body'
+import { Content } from '~/components'
 
 import { write } from './helpers'
-import { QuartzPluginData } from '../vfile'
-import { QuartzEmitterPlugin } from '../types'
-import { StaticResources } from '../../util/resources'
-import { pathToRoot } from '../../util/path'
-import { BuildCtx } from '../../util/ctx'
-import { QuartzComponentProps } from '../../components/types'
-import { pageResources, renderPage } from '../../components/renderPage'
-import HeaderConstructor from '../../components/Header'
-import BodyConstructor from '../../components/Body'
-import { Content } from '../../components'
-import { FullPageLayout } from '../../cfg'
-import {
-    defaultContentPageLayout,
-    sharedPageComponents
-} from '../../../quartz.layout'
 
 async function processContent(
     ctx: BuildCtx,

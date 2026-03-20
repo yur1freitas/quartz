@@ -1,6 +1,6 @@
 import remarkBreaks from 'remark-breaks'
 
-import { QuartzTransformerPlugin } from '../types'
+import type { QuartzTransformerPlugin } from '~/types/plugins'
 
 export const HardLineBreaks: QuartzTransformerPlugin = () => {
     return {

@@ -1,9 +1,12 @@
-import { Readable } from 'stream'
-import path from 'path'
-import fs from 'fs'
+import type { Readable } from 'node:stream'
 
-import { FilePath, FullSlug, joinSegments } from '../../util/path'
-import { BuildCtx } from '../../util/ctx'
+import path from 'node:path'
+import { mkdir, writeFile } from 'node:fs/promises'
+
+import type { FilePath, FullSlug } from '~/types/path'
+import type { BuildCtx } from '~/types/ctx'
+
+import { joinSegments } from '~/utils/path/joinSegments'
 
 type WriteOptions = {
     ctx: BuildCtx
@@ -20,7 +23,9 @@ export const write = async ({
 }: WriteOptions): Promise<FilePath> => {
     const pathToPage = joinSegments(ctx.argv.output, slug + ext) as FilePath
     const dir = path.dirname(pathToPage)
-    await fs.promises.mkdir(dir, { recursive: true })
-    await fs.promises.writeFile(pathToPage, content)
+
+    await mkdir(dir, { recursive: true })
+    await writeFile(pathToPage, content)
+
     return pathToPage
 }

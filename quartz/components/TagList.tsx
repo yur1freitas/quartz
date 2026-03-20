@@ -1,10 +1,12 @@
-import {
+import type { FullSlug } from '~/types/path'
+import type {
     QuartzComponent,
     QuartzComponentConstructor,
     QuartzComponentProps
-} from './types'
-import { FullSlug, resolveRelative } from '../util/path'
-import { classNames } from '../util/lang'
+} from '~/types/jsx'
+
+import { resolveRelative } from '~/utils/path/resolveRelative'
+import { classNames } from '~/utils/classNames'
 
 const TagList: QuartzComponent = ({
     fileData,
@@ -47,7 +49,7 @@ TagList.css = `
 .section-li > .section > .tags {
   justify-content: flex-end;
 }
-  
+
 .tags > li {
   display: inline-block;
   white-space: nowrap;

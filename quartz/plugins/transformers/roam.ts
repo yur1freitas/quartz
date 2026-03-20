@@ -1,13 +1,12 @@
-import { BuildVisitor } from 'unist-util-visit'
-import { visit } from 'unist-util-visit'
-import { PluggableList } from 'unified'
-import {
-    ReplaceFunction,
-    findAndReplace as mdastFindReplace
-} from 'mdast-util-find-and-replace'
-import { Root, Html, Paragraph, Text, Link, Parent } from 'mdast'
+import type { BuildVisitor } from 'unist-util-visit'
+import type { PluggableList } from 'unified'
+import type { ReplaceFunction } from 'mdast-util-find-and-replace'
+import type { Root, Html, Paragraph, Text, Link, Parent } from 'mdast'
 
-import { QuartzTransformerPlugin } from '../types'
+import { visit } from 'unist-util-visit'
+import { findAndReplace as mdastFindReplace } from 'mdast-util-find-and-replace'
+
+import type { QuartzTransformerPlugin } from '~/types/plugins'
 
 export interface Options {
     orComponent: boolean
@@ -81,12 +80,12 @@ function transformSpecialEmbed(node: Paragraph, opts: Options): Html | null {
             )
             if (youtubeMatch) {
                 const videoId = youtubeMatch[1].split('&')[0] // Remove additional parameters
-                const playlistMatch = url.match(/[?&]list=([^#\&\?]*)/)
+                const playlistMatch = url.match(/[?&]list=([^#&?]*)/)
                 const playlistId = playlistMatch ? playlistMatch[1] : null
 
                 return {
                     type: 'html',
-                    value: `<iframe 
+                    value: `<iframe
             class="external-embed youtube"
             width="600px"
             height="350px"

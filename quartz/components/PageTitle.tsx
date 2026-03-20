@@ -1,10 +1,12 @@
-import {
+import type {
     QuartzComponent,
     QuartzComponentConstructor,
     QuartzComponentProps
-} from './types'
-import { pathToRoot } from '../util/path'
-import { classNames } from '../util/lang'
+} from '~/types/jsx'
+
+import { pathToRoot } from '~/utils/path/pathToRoot'
+import { classNames } from '~/utils/classNames'
+
 import { i18n } from '../i18n'
 
 const PageTitle: QuartzComponent = ({

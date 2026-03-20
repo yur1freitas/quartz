@@ -1,5 +1,6 @@
+import type { QuartzConfig } from './quartz/types/config'
+
 import * as Plugin from './quartz/plugins'
-import { QuartzConfig } from './quartz/cfg'
 
 /**
  * Quartz 4 Configuration

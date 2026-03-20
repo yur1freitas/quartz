@@ -1,7 +1,8 @@
-import { PluggableList } from 'unified'
+import type { PluggableList } from 'unified'
+
 import rehypeRaw from 'rehype-raw'
 
-import { QuartzTransformerPlugin } from '../types'
+import type { QuartzTransformerPlugin } from '~/types/plugins'
 
 export interface Options {
     /** Replace {{ relref }} with quartz wikilinks []() */

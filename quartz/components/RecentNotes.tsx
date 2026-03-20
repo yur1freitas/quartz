@@ -1,17 +1,21 @@
-import {
+import type { QuartzPluginData } from '~/types/vfile'
+import type { FullSlug, SimpleSlug } from '~/types/path'
+import type {
     QuartzComponent,
     QuartzComponentConstructor,
     QuartzComponentProps
-} from './types'
-import { byDateAndAlphabetical } from './PageList'
-import { Date, getDate } from './Date'
-import { FullSlug, SimpleSlug, resolveRelative } from '../util/path'
-import { classNames } from '../util/lang'
-import { QuartzPluginData } from '../plugins/vfile'
+} from '~/types/jsx'
+import type { GlobalConfiguration } from '~/types/config'
+
+import { resolveRelative } from '~/utils/path/resolveRelative'
+import { getDate } from '~/utils/date/getDate'
+import { classNames } from '~/utils/classNames'
+
 import { i18n } from '../i18n'
-import { GlobalConfiguration } from '../cfg'
 
 import style from './styles/recentNotes.scss'
+import { byDateAndAlphabetical } from './PageList'
+import { Date } from './Date'
 
 interface Options {
     title?: string

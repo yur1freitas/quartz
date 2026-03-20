@@ -9,12 +9,12 @@ import {
     handleRestore,
     handleSync
 } from './cli/handlers.js'
-import { version } from './cli/constants.js'
+import { VERSION } from './cli/consts.js'
 import { CommonArgv, BuildArgv, CreateArgv, SyncArgv } from './cli/args.js'
 
 yargs(hideBin(process.argv))
     .scriptName('quartz')
-    .version(version)
+    .version(VERSION)
     .usage('$0 <cmd> [args]')
     .command('create', 'Initialize Quartz', CreateArgv, async (argv) => {
         await handleCreate(argv)

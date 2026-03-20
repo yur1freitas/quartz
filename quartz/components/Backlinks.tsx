@@ -1,14 +1,17 @@
-import {
+import type {
     QuartzComponent,
     QuartzComponentConstructor,
     QuartzComponentProps
-} from './types'
-import OverflowListFactory from './OverflowList'
-import { resolveRelative, simplifySlug } from '../util/path'
-import { classNames } from '../util/lang'
+} from '~/types/jsx'
+
+import { simplifySlug } from '~/utils/path/simplifySlug'
+import { resolveRelative } from '~/utils/path/resolveRelative'
+import { classNames } from '~/utils/classNames'
+
 import { i18n } from '../i18n'
 
 import style from './styles/backlinks.scss'
+import OverflowListFactory from './OverflowList'
 
 interface BacklinksOptions {
     hideWhenEmpty: boolean
@@ -32,9 +35,11 @@ export default ((opts?: Partial<BacklinksOptions>) => {
         const backlinkFiles = allFiles.filter((file) =>
             file.links?.includes(slug)
         )
+
         if (options.hideWhenEmpty && backlinkFiles.length == 0) {
             return null
         }
+
         return (
             <div class={classNames(displayClass, 'backlinks')}>
                 <h3>{i18n(cfg.locale).components.backlinks.title}</h3>

@@ -1,28 +1,34 @@
 import sourceMapSupport from 'source-map-support'
-sourceMapSupport.install(options)
-import { styleText } from 'util'
-import path from 'path'
-import { rm } from 'fs/promises'
+sourceMapSupport.install(sourceMapOptions)
+import { styleText } from 'node:util'
+import path from 'node:path'
+import { rm } from 'node:fs/promises'
+
+import type { GlobbyFilterFunction } from 'globby'
+import type { Mutex } from 'async-mutex'
 
 import { minimatch } from 'minimatch'
-import { GlobbyFilterFunction, isGitIgnored } from 'globby'
+import { isGitIgnored } from 'globby'
 import chokidar from 'chokidar'
-import { Mutex } from 'async-mutex'
 
-import { trace } from './util/trace'
-import { options } from './util/sourcemap'
-import { randomIdNonSecure } from './util/random'
-import { PerfTimer } from './util/perf'
-import { FilePath, joinSegments, slugifyFilePath } from './util/path'
-import { glob, toPosixPath } from './util/glob'
-import { Argv, BuildCtx } from './util/ctx'
-import { parseMarkdown } from './processors/parse'
-import { filterContent } from './processors/filter'
-import { emitContent } from './processors/emit'
-import { ProcessedContent } from './plugins/vfile'
-import { ChangeEvent } from './plugins/types'
-import { getStaticResourcesFromPlugins } from './plugins'
-import cfg from '../quartz.config'
+import quartzConfig from '~quartzConfig'
+import { joinSegments } from '~/utils/path/joinSegments'
+
+import type { ProcessedContent } from './types/vfile'
+import type { ChangeEvent } from './types/plugins'
+import type { FilePath } from './types/path'
+import type { Argv, BuildCtx } from './types/ctx'
+
+import { trace } from './utils/trace'
+import { randomIdNonSecure } from './utils/random'
+import { getStaticResourcesFromPlugins } from './utils/plugins/getStaticResourcesFromPlugins'
+import { sluggifyFilePath } from './utils/path/sluggifyFilePath'
+import { PerfTimer } from './utils/models/PerfTime'
+import { glob, toPosixPath } from './utils/glob'
+import { sourceMapOptions } from './sourcemap'
+import { parseMarkdown } from './processors/parser/parseMarkdown'
+import { filterContent } from './processors/filter/filterContent'
+import { emitContent } from './processors/emit/emitContent'
 
 type ContentMap = Map<
     FilePath,
@@ -48,7 +54,7 @@ async function buildQuartz(argv: Argv, mut: Mutex, clientRefresh: () => void) {
     const ctx: BuildCtx = {
         buildId: randomIdNonSecure(),
         argv,
-        cfg,
+        cfg: quartzConfig,
         allSlugs: [],
         allFiles: [],
         incremental: false
@@ -57,9 +63,9 @@ async function buildQuartz(argv: Argv, mut: Mutex, clientRefresh: () => void) {
     const perf = new PerfTimer()
     const output = argv.output
 
-    const pluginCount = Object.values(cfg.plugins).flat().length
+    const pluginCount = Object.values(quartzConfig.plugins).flat().length
     const pluginNames = (key: 'transformers' | 'filters' | 'emitters') =>
-        cfg.plugins[key].map((plugin) => plugin.name)
+        quartzConfig.plugins[key].map((plugin) => plugin.name)
     if (argv.verbose) {
         console.log(`Loaded ${pluginCount} plugins`)
         console.log(`  Transformers: ${pluginNames('transformers').join(', ')}`)
@@ -78,9 +84,11 @@ async function buildQuartz(argv: Argv, mut: Mutex, clientRefresh: () => void) {
     const allFiles = await glob(
         '**/*.*',
         argv.directory,
-        cfg.configuration.ignorePatterns
+        quartzConfig.configuration.ignorePatterns
     )
-    const markdownPaths = allFiles.filter((fp) => fp.endsWith('.md')).sort()
+    const markdownPaths = allFiles
+        .filter((filePath) => filePath.endsWith('.md'))
+        .sort()
     console.log(
         `Found ${markdownPaths.length} input files from \`${argv.directory}\` in ${perf.timeSince('glob')}`
     )
@@ -89,7 +97,7 @@ async function buildQuartz(argv: Argv, mut: Mutex, clientRefresh: () => void) {
         (fp) => joinSegments(argv.directory, fp) as FilePath
     )
     ctx.allFiles = allFiles
-    ctx.allSlugs = allFiles.map((fp) => slugifyFilePath(fp as FilePath))
+    ctx.allSlugs = allFiles.map((fp) => sluggifyFilePath(fp as FilePath))
 
     const parsedFiles = await parseMarkdown(ctx, filePaths)
     const filteredContent = filterContent(ctx, parsedFiles)
@@ -142,7 +150,7 @@ async function startWatching(
             const pathStr = toPosixPath(fp.toString())
             if (pathStr.startsWith('.git/')) return true
             if (gitIgnoredMatcher(pathStr)) return true
-            for (const pattern of cfg.configuration.ignorePatterns) {
+            for (const pattern of quartzConfig.configuration.ignorePatterns) {
                 if (minimatch(pathStr, pattern)) {
                     return true
                 }
@@ -276,7 +284,9 @@ async function rebuild(
 
     // update allFiles and then allSlugs with the consistent view of content map
     ctx.allFiles = Array.from(contentMap.keys())
-    ctx.allSlugs = ctx.allFiles.map((fp) => slugifyFilePath(fp as FilePath))
+    ctx.allSlugs = ctx.allFiles.map((filePath) =>
+        sluggifyFilePath(filePath as FilePath)
+    )
     let processedFiles = filterContent(
         ctx,
         Array.from(contentMap.values())

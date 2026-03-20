@@ -1,14 +1,16 @@
-import {
+import type {
     QuartzComponent,
     QuartzComponentConstructor,
     QuartzComponentProps
-} from './types'
-// @ts-ignore
-import darkmodeScript from './scripts/darkmode.inline'
-import { classNames } from '../util/lang'
+} from '~/types/jsx'
+
+import { classNames } from '~/utils/classNames'
+
 import { i18n } from '../i18n'
 
 import styles from './styles/darkmode.scss'
+// @ts-ignore
+import darkmodeScript from './scripts/darkmode.inline'
 
 const Darkmode: QuartzComponent = ({
     displayClass,

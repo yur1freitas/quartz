@@ -1,8 +1,8 @@
-import {
+import type {
     QuartzComponent,
     QuartzComponentConstructor,
     QuartzComponentProps
-} from './types'
+} from '~/types/jsx'
 
 type ConditionalRenderConfig = {
     component: QuartzComponent

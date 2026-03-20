@@ -1,8 +1,8 @@
-import {
+import type {
     QuartzComponent,
     QuartzComponentConstructor,
     QuartzComponentProps
-} from './types'
+} from '~/types/jsx'
 
 const Header: QuartzComponent = ({ children }: QuartzComponentProps) => {
     return children.length > 0 ? <header>{children}</header> : null

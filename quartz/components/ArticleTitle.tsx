@@ -1,9 +1,10 @@
-import {
+import type {
     QuartzComponent,
     QuartzComponentConstructor,
     QuartzComponentProps
-} from './types'
-import { classNames } from '../util/lang'
+} from '~/types/jsx'
+
+import { classNames } from '~/utils/classNames'
 
 const ArticleTitle: QuartzComponent = ({
     fileData,

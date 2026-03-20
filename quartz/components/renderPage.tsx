@@ -1,22 +1,24 @@
-import { styleText } from 'util'
+import { styleText } from 'node:util'
+
+import type { Root, Element, ElementContent } from 'hast'
 
 import { visit } from 'unist-util-visit'
 import { render } from 'preact-render-to-string'
-import { Root, Element, ElementContent } from 'hast'
 
-import { QuartzComponent, QuartzComponentProps } from './types'
+import type { StaticResources } from '~/types/resources'
+import type { FullSlug, RelativeURL } from '~/types/path'
+import type { QuartzComponent, QuartzComponentProps } from '~/types/jsx'
+import type { GlobalConfiguration } from '~/types/config'
+
+import { JSResourceToScriptElement } from '~/utils/resources/JSResourceToScriptElement'
+import { normalizeHastElement } from '~/utils/path/normalizeHastElement'
+import { joinSegments } from '~/utils/path/joinSegments'
+import { clone } from '~/utils/clone'
+
+import { i18n } from '../i18n'
+
 import HeaderConstructor from './Header'
 import BodyConstructor from './Body'
-import { JSResourceToScriptElement, StaticResources } from '../util/resources'
-import {
-    FullSlug,
-    RelativeURL,
-    joinSegments,
-    normalizeHastElement
-} from '../util/path'
-import { clone } from '../util/clone'
-import { i18n } from '../i18n'
-import { GlobalConfiguration } from '../cfg'
 
 interface RenderComponents {
     head: QuartzComponent

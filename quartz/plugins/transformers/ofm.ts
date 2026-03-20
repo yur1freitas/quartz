@@ -1,14 +1,8 @@
-import path from 'path'
+import path from 'node:path'
 
-import { SKIP, visit } from 'unist-util-visit'
-import { PluggableList } from 'unified'
-import rehypeRaw from 'rehype-raw'
-import { toHast } from 'mdast-util-to-hast'
-import {
-    ReplaceFunction,
-    findAndReplace as mdastFindReplace
-} from 'mdast-util-find-and-replace'
-import {
+import type { PluggableList } from 'unified'
+import type { ReplaceFunction } from 'mdast-util-find-and-replace'
+import type {
     Root,
     Html,
     BlockContent,
@@ -17,22 +11,30 @@ import {
     Paragraph,
     Code
 } from 'mdast'
+import type { Element, Literal, Root as HtmlRoot } from 'hast'
+
+import { SKIP, visit } from 'unist-util-visit'
+import rehypeRaw from 'rehype-raw'
+import { toHast } from 'mdast-util-to-hast'
+import { findAndReplace as mdastFindReplace } from 'mdast-util-find-and-replace'
 import { toHtml } from 'hast-util-to-html'
-import { Element, Literal, Root as HtmlRoot } from 'hast'
 
-import { QuartzTransformerPlugin } from '../types'
-import { JSResource, CSSResource } from '../../util/resources'
-import { FilePath, pathToRoot, slugTag, slugifyFilePath } from '../../util/path'
-import { splitAnchor } from '../../util/path'
-import { capitalize } from '../../util/lang'
-// @ts-ignore
-import mermaidScript from '../../components/scripts/mermaid.inline'
-// @ts-ignore
-import checkboxScript from '../../components/scripts/checkbox.inline'
-// @ts-ignore
-import calloutScript from '../../components/scripts/callout.inline'
+import type { CSSResource, JSResource } from '~/types/resources'
+import type { QuartzTransformerPlugin } from '~/types/plugins'
+import type { FilePath } from '~/types/path'
 
-import mermaidStyle from '../../components/styles/mermaid.inline.scss'
+import { splitAnchor } from '~/utils/path/splitAnchor'
+import { slugTag } from '~/utils/path/slugTag'
+import { sluggifyFilePath } from '~/utils/path/sluggifyFilePath'
+import { pathToRoot } from '~/utils/path/pathToRoot'
+import { capitalize } from '~/utils/capitalize'
+import mermaidStyle from '~/components/styles/mermaid.inline.scss'
+// @ts-ignore
+import mermaidScript from '~/components/scripts/mermaid.inline'
+// @ts-ignore
+import checkboxScript from '~/components/scripts/checkbox.inline'
+// @ts-ignore
+import calloutScript from '~/components/scripts/callout.inline'
 
 export interface Options {
     comments: boolean
@@ -124,7 +126,7 @@ export const arrowRegex = new RegExp(/(-{1,2}>|={1,2}>|<-{1,2}|<={1,2})/g)
 // (#[^\[\]\|\#]+)?   -> # then one or more non-special characters (heading link)
 // (\\?\|[^\[\]\#]+)? -> optional escape \ then | then zero or more non-special characters (alias)
 export const wikilinkRegex = new RegExp(
-    /!?\[\[([^\[\]\|\#\\]+)?(#+[^\[\]\|\#\\]+)?(\\?\|[^\[\]\#]*)?\]\]/g
+    /!?\[\[([^[\]|#\\]+)?(#+[^[\]|#\\]+)?(\\?\|[^[\]#]*)?\]\]/g
 )
 
 // ^\|([^\n])+\|\n(\|) -> matches the header row
@@ -142,8 +144,8 @@ export const tableWikilinkRegex = new RegExp(
 const highlightRegex = new RegExp(/==([^=]+)==/g)
 const commentRegex = new RegExp(/%%[\s\S]*?%%/g)
 // from https://github.com/escwxyz/remark-obsidian-callout/blob/main/src/index.ts
-const calloutRegex = new RegExp(/^\[\!([\w-]+)\|?(.+?)?\]([+-]?)/)
-const calloutLineRegex = new RegExp(/^> *\[\!\w+\|?.*?\][+-]?.*$/gm)
+const calloutRegex = new RegExp(/^\[!([\w-]+)\|?(.+?)?\]([+-]?)/)
+const calloutLineRegex = new RegExp(/^> *\[!\w+\|?.*?\][+-]?.*$/gm)
 // (?<=^| )             -> a lookbehind assertion, tag should start be separated by a space or be the start of the line
 // #(...)               -> capturing group, tag itself must start with #
 // (?:[-_\p{L}\d\p{Z}])+       -> non-capturing group, non-empty string of (Unicode-aware) alpha-numeric characters and symbols, hyphens and/or underscores
@@ -153,7 +155,7 @@ const tagRegex = new RegExp(
 )
 const blockReferenceRegex = new RegExp(/\^([-_A-Za-z0-9]+)$/g)
 const ytLinkRegex =
-    /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/
+    /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
 const ytPlaylistLinkRegex = /[?&]list=([^#?&]*)/
 const videoExtensionRegex = new RegExp(
     /\.(mp4|webm|ogg|avi|mov|flv|wmv|mkv|mpg|mpeg|3gp|m4v)$/
@@ -215,9 +217,7 @@ export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<
                     const [fp, anchor] = splitAnchor(
                         `${rawFp ?? ''}${rawHeader ?? ''}`
                     )
-                    const blockRef = Boolean(rawHeader?.startsWith('#^'))
-                        ? '^'
-                        : ''
+                    const blockRef = rawHeader?.startsWith('#^') ? '^' : ''
                     const displayAnchor = anchor
                         ? `#${blockRef}${anchor.trim().replace(/^#+/, '')}`
                         : ''
@@ -261,7 +261,7 @@ export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<
                                     const ext: string = path
                                         .extname(fp)
                                         .toLowerCase()
-                                    const url = slugifyFilePath(fp as FilePath)
+                                    const url = sluggifyFilePath(fp as FilePath)
                                     if (
                                         [
                                             '.png',
@@ -346,14 +346,16 @@ export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<
 
                                 // treat as broken link if slug not in ctx.allSlugs
                                 if (opts.disableBrokenWikilinks) {
-                                    const slug = slugifyFilePath(fp as FilePath)
+                                    const slug = sluggifyFilePath(
+                                        fp as FilePath
+                                    )
                                     const exists =
                                         ctx.allSlugs &&
                                         ctx.allSlugs.includes(slug)
                                     if (!exists) {
                                         return {
                                             type: 'html',
-                                            value: `<a class=\"internal broken\">${alias ?? fp}</a>`
+                                            value: `<a class="internal broken">${alias ?? fp}</a>`
                                         }
                                     }
                                 }
@@ -407,7 +409,7 @@ export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<
                             tagRegex,
                             (_value: string, tag: string) => {
                                 // Check if the tag only includes numbers and slashes
-                                if (/^[\/\d]+$/.test(tag)) {
+                                if (/^[/\d]+$/.test(tag)) {
                                     return false
                                 }
 
@@ -634,7 +636,7 @@ export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<
                                 // add properties to base blockquote
                                 node.data = {
                                     hProperties: {
-                                        ...(node.data?.hProperties ?? {}),
+                                        ...node.data?.hProperties,
                                         'className': classNames.join(' '),
                                         'data-callout': calloutType,
                                         'data-callout-fold': collapse,

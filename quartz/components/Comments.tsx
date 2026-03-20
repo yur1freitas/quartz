@@ -1,11 +1,13 @@
-import {
+import type {
     QuartzComponent,
     QuartzComponentConstructor,
     QuartzComponentProps
-} from './types'
+} from '~/types/jsx'
+
+import { classNames } from '~/utils/classNames'
+
 // @ts-ignore
 import script from './scripts/comments.inline'
-import { classNames } from '../util/lang'
 
 type Options = {
     provider: 'giscus'
