@@ -83,6 +83,16 @@ saudacao(nome)
 
 Um código em linha `console.log('Hello World!')` entre textos normais
 
+## Code Runner
+
+```python showCodeRunner
+def saudacao(nome: str) -> None:
+    print(f"Olá {nome}!")
+
+nome = input("Digite seu nome: ")
+saudacao(nome)
+```
+
 ## Linha Horizontal
 
 ---
