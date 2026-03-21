@@ -105,5 +105,9 @@
         &:empty {
             display: none;
         }
+
+        &[data-state='error'] {
+            color: var(--red);
+        }
     }
 }
