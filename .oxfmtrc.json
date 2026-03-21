@@ -10,6 +10,23 @@
     "trailingComma": "none",
     "ignorePatterns": ["*-lock.{yaml,json}"],
     "sortImports": {
-        "order": "desc"
+        "order": "desc",
+        "internalPattern": ["~/", "~quartzConfig", "~quartzLayout"],
+        "groups": [
+            "type-import",
+            "type-builtin",
+            "value-builtin",
+            "type-external",
+            "value-external",
+            "type-internal",
+            "value-internal",
+            "type-parent",
+            "value-parent",
+            "type-sibling",
+            "value-sibling",
+            "type-index",
+            "value-index",
+            "unknown"
+        ]
     }
 }
