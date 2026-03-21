@@ -112,22 +112,35 @@ declare global {
         editor: EditorView
     ): void => {
         runBtn.onclick = async () => {
-            if (pyodideIsRunning) {
-                output.innerText =
-                    'Têm um código em execução. Espere até que termine para executar outro'
-                return
+            try {
+                if (pyodideIsRunning) {
+                    output.innerText =
+                        'Têm um código em execução. Espere até que termine para executar outro'
+                    return
+                }
+
+                output.setAttribute('data-state', 'running')
+
+                pyodideOutput = ''
+                pyodideIsRunning = true
+
+                const code = editor.state.doc.toString()
+
+                const pyodide = await getPyodide()
+                await pyodide.runPythonAsync(code)
+
+                output.setAttribute('data-state', 'success')
+
+                output.innerText = pyodideOutput
+                pyodideIsRunning = false
+            } catch (error) {
+                if (Error.isError(error)) {
+                    output.setAttribute('data-state', 'error')
+
+                    output.innerText = `- - ERROR - -\n\n${error.message}`
+                    pyodideIsRunning = false
+                }
             }
-
-            pyodideOutput = ''
-            pyodideIsRunning = true
-
-            const code = editor.state.doc.toString()
-
-            const pyodide = await getPyodide()
-            await pyodide.runPythonAsync(code)
-
-            output.innerText = pyodideOutput
-            pyodideIsRunning = false
         }
     }
 
