@@ -10,8 +10,8 @@ import {
     readFile,
     cp
 } from 'node:fs/promises'
-import { promises } from 'node:fs'
 import { existsSync, lstatSync } from 'node:fs'
+import { promises } from 'node:fs'
 import { randomUUID } from 'node:crypto'
 import { execSync, spawnSync } from 'node:child_process'
 
