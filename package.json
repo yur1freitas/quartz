@@ -27,6 +27,8 @@
         "docs": "npx quartz build --serve -d docs",
         "check": "tsc --noEmit && npx prettier . --check",
         "format": "oxfmt",
+        "lint": "oxlint .",
+        "lint:fix": "oxlint . --fix",
         "test": "tsx --test",
         "profile": "0x -D prof ./quartz/bootstrap-cli.mjs build --concurrency=1"
     },
