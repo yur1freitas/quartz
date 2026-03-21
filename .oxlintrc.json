@@ -1,8 +1,15 @@
 {
     "$schema": "./node_modules/oxlint/configuration_schema.json",
-    "plugins": ["oxc", "unicorn", "typescript", "react"],
+    "plugins": ["oxc", "unicorn", "typescript", "react", "import"],
     "categories": {},
-    "rules": {},
+    "rules": {
+        "typescript/consistent-type-exports": "warn",
+        "typescript/consistent-type-imports": [
+            "warn",
+            { "fixStyle": "separate-type-imports" }
+        ],
+        "import/consistent-type-specifier-style": ["warn", "prefer-top-level"]
+    },
     "settings": {
         "jsx-a11y": {
             "polymorphicPropName": null,
