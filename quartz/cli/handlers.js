@@ -11,7 +11,6 @@ import {
     cp
 } from 'node:fs/promises'
 import { existsSync, lstatSync } from 'node:fs'
-import { promises } from 'node:fs'
 import { randomUUID } from 'node:crypto'
 import { execSync, spawnSync } from 'node:child_process'
 
@@ -288,10 +287,7 @@ export async function handleBuild(argv) {
                     build.onLoad(
                         { filter: /\.inline\.(ts|js)$/ },
                         async (args) => {
-                            let text = await promises.readFile(
-                                args.path,
-                                'utf8'
-                            )
+                            let text = await readFile(args.path, 'utf8')
 
                             // remove default exports that we manually inserted
                             text = text.replace('export default', '')
